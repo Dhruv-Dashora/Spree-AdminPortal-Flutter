@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "279948758907",
+    "firebase_url": "https://spree-bpgc-default-rtdb.firebaseio.com",
+    "project_id": "spree-bpgc",
+    "storage_bucket": "spree-bpgc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:279948758907:android:f171f345ed6c1b959737de",
+        "android_client_info": {
+          "package_name": "com.company.ronan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTeka2GmkP4WI7_e_7HMF3OyUpw63Uo9Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:279948758907:android:43044ddf903e1a2b9737de",
+        "android_client_info": {
+          "package_name": "com.example.spree_portal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTeka2GmkP4WI7_e_7HMF3OyUpw63Uo9Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
