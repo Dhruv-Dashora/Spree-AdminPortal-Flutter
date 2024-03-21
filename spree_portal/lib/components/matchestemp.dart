@@ -15,9 +15,6 @@ class _MatchesState extends State<Matches> {
   final DatabaseReference _database = FirebaseDatabase.instance.ref();
   final List<Widget> _matchCards = [];
 
-  String team1 = '';
-  String team2 = '';
-
   @override
   void initState() {
     super.initState();
@@ -25,27 +22,27 @@ class _MatchesState extends State<Matches> {
   }
 
   Future<void> _fetchMatches() async {
-   try {
-  DataSnapshot snapshot = (await _database.child(widget.sportName).once()) as DataSnapshot;
-  if (snapshot.value != null) {
-    Map<dynamic, dynamic>? matches = snapshot.value as Map<dynamic, dynamic>?;
+    try {
+      DatabaseEvent event = await _database.child('sports').child(widget.sportName).once();
+      DataSnapshot snapshot = event.snapshot;
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic>? games = snapshot.value as Map<dynamic, dynamic>?;
 
-    if (matches != null) {
-      matches.forEach((key, value) {
-        String team1 = value['team1'];
-        String team2 = value['team2'];
-        _matchCards.add(_buildMatchCard(team1, team2));
-      });
-      setState(() {});
+        if (games != null) {
+          games.forEach((gameKey, game) {
+            String team1Name = game['team1']['name'];
+            String team2Name = game['team2']['name'];
+            _matchCards.add(_buildMatchCard(team1Name, team2Name, gameKey));
+          });
+          setState(() {});
+        }
+      }
+    } catch (e) {
+      print('Error fetching matches: $e');
     }
   }
-} catch (e) {
-  print('Error fetching matches: $e');
-}
 
-  }
-
-  Widget _buildMatchCard(String team1, String team2) {
+  Widget _buildMatchCard(String team1, String team2, String gameKey) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Card(
@@ -57,79 +54,22 @@ class _MatchesState extends State<Matches> {
             children: [
               Text(
                 '$team1 vs $team2',
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style:
+                const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAddMatchCard() {
-    final TextEditingController team1controller = TextEditingController();
-    final TextEditingController team2controller = TextEditingController();
-
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Card(
-        elevation: 4,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: team1controller,
-                decoration: const InputDecoration(hintText: 'Enter Team 1'),
-                onChanged: (value) {
-                  setState(() {
-                    team1 = value;
-                  });
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Scoreboard(
+                        sportName: widget.sportName,
+                      ),
+                    ),
+                  );
                 },
-              ),
-              TextFormField(
-                controller: team2controller,
-                decoration: const InputDecoration(hintText: 'Enter Team 2'),
-                onChanged: (value) {
-                  setState(() {
-                    team2 = value;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        int index = _matchCards.length - 1;
-                        _matchCards.removeAt(index);
-                      });
-                    },
-                    child: const Text('Cancel'),
-                  ),
-                  const SizedBox(width: 8),
-                  ElevatedButton(
-                    onPressed: () {
-                      _database.child(widget.sportName).push().set({
-                        'team1': team1controller.text,
-                        'team2': team2controller.text,
-                      });
-                     
-                            Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Scoreboard(team1Name: team1controller.text, team2Name: team2controller.text),
-                        ),
-                      );
-                    },
-                    child: const Text('Scoreboard'),
-                  ),
-                ],
+                child: const Text('Scoreboard'),
               ),
             ],
           ),
@@ -147,9 +87,7 @@ class _MatchesState extends State<Matches> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          setState(() {
-            _matchCards.add(_buildAddMatchCard());
-          });
+          // complete thissssss
         },
         child: const Icon(Icons.add),
       ),
