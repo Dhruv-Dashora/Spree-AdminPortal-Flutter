@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:spree_portal/firebase_options.dart';
 import 'package:spree_portal/screens/home.dart';
+import 'package:spree_portal/screens/home2.dart';
 import 'package:spree_portal/screens/login.dart';
 
 void main() async{
@@ -10,9 +11,9 @@ void main() async{
     options: DefaultFirebaseOptions.currentPlatform
   );
   
-  runApp(const MaterialApp(
+  runApp( MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: Login(),
+    home: HomeScreen(),
   ));
 }
 
