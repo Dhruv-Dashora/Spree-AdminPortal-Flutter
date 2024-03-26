@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:spree_portal/screens/home.dart';
+//import 'package:spree_portal/screens/home.dart';
+import 'package:spree_portal/screens/home2.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -31,7 +32,7 @@ class _LoginState extends State<Login> {
       
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const Portal()),
+        MaterialPageRoute(builder: (_) =>  HomeScreen()),
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found' || e.code == 'wrong-password') {
