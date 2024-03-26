@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 class MatchInfoScreen extends StatefulWidget {
   final String sport;
   final String gameTitle;
-  //final Map<String, dynamic> matchInfo;
 
   MatchInfoScreen({required this.sport, required this.gameTitle});
 
@@ -13,12 +12,12 @@ class MatchInfoScreen extends StatefulWidget {
 }
 
 class _MatchInfoScreenState extends State<MatchInfoScreen> {
-//
   late DatabaseReference _sportRef;
-   String team1 = "";
-   String team2 ="";
-   String score1 = "";
-   String score2 = "";
+  String team1 = "";
+  String team2 ="";
+  String score1 = "";
+  String score2 = "";
+  String progress = "";
 
   @override
   void initState() {
@@ -26,10 +25,11 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
     _sportRef = FirebaseDatabase.instance.ref().child('sports/${widget.sport}/${widget.gameTitle}');
     _fetchGameData();
   }
+
   void _incrementScore (String lr, String currentScore) async {
-      int t = int.parse(currentScore);
-      t++;
-      await _sportRef.update({
+    int t = int.parse(currentScore);
+    t++;
+    await _sportRef.update({
       "score$lr": t.toString(),
     });
   }
@@ -42,161 +42,137 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
     });
   }
 
-  void _fetchGameData() async {
-    // final ref = FirebaseDatabase.instance.ref();
-    // final snapshot = await ref.child('sports/${widget.sport}/${widget.gameTitle}').get();
-    // if (snapshot.exists) {
-    //   //team1 = snapshot.value[team1];
-    //  print(snapshot.value);
-    //   } else {
-    // print('No data available.');
-    //   }
+  void _updateProgress(String newProgress) async {
+    await _sportRef.update({
+      "progress": newProgress,
+    });
+  }
+
+  void _fetchGameData() {
     _sportRef.onValue.listen((DatabaseEvent event) {
-      
-      // Map<String, dynamic>? gameData = snapshot.value;
-      // if (gameData != null) {
-      //   setState(() {
-      //     team1 = gameData['team1'] ?? '';
-      //     team2 = gameData['team2'] ?? '';
-      //     score1 = gameData['score1'] ?? '';
-      //     score2 = gameData['score2'] ?? '';
-      //   });
-      // }
-
-
       if (event.snapshot.value != null) {
-      
-      Map<dynamic, dynamic> gameData = event.snapshot.value as Map<dynamic, dynamic>;
-      
-      setState(() {
+        Map<dynamic, dynamic> gameData = event.snapshot.value as Map<dynamic, dynamic>;
+        setState(() {
           team1 = gameData['team1'] ?? '';
           team2 = gameData['team2'] ?? '';
           score1 = gameData['score1'] ?? '';
           score2 = gameData['score2'] ?? '';
-      });
-    }
+          progress = gameData['progress'] ?? '';
+        });
+      }
     });
-    // .catchError((error) {
-    //   print('Error fetching game data: $error');
-    // });
   }
 
-//
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       title: Text(widget.gameTitle),
-  //     ),
-  //     body: Padding(
-  //       padding: EdgeInsets.all(20.0),
-  //       child: Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           Text(
-  //             'Game Title:',
-  //             style: TextStyle(fontWeight: FontWeight.bold),
-  //           ),
-  //           Text(widget.gameTitle),
-  //           SizedBox(height: 10),
-  //           Text(
-  //             'Team 1:',
-  //             style: TextStyle(fontWeight: FontWeight.bold),
-  //           ),
-  //           Text(team1),
-  //           SizedBox(height: 10),
-  //           Text(
-  //             'Team 2:',
-  //             style: TextStyle(fontWeight: FontWeight.bold),
-  //           ),
-  //           Text(team2),
-  //           SizedBox(height: 10),
-  //           Text(
-  //             'Score 1:',
-  //             style: TextStyle(fontWeight: FontWeight.bold),
-  //           ),
-  //           Text('${score1}'),
-  //           SizedBox(height: 10),
-  //           Text(
-  //             'Score 2:',
-  //             style: TextStyle(fontWeight: FontWeight.bold),
-  //           ),
-  //           Text('${score2}'),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
-    @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.gameTitle),
+        backgroundColor: Colors.purpleAccent,
       ),
       body: Row(
         children: [
           Expanded(
-            child: _buildTeamColumn(
-              teamName: team1,
-              score: score1,
-              onIncrement: () => _incrementScore("1",score1),
-              onDecrement: () =>_decrementScore("1",score1),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Team:',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    team1,
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () => _decrementScore("1", score1),
+                        child: Icon(Icons.remove),
+                      ),
+                      Text(
+                        '$score1',
+                        style: TextStyle(fontSize: 24),
+                      ),
+                      ElevatedButton(
+                        onPressed: () => _incrementScore("1", score1),
+                        child: Icon(Icons.add),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
           Expanded(
-            child: _buildTeamColumn(
-              teamName: team2,
-              score: score2,
-              onIncrement: () => _incrementScore("2",score2),
-              onDecrement: () => _decrementScore("2",score1),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Team:',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    team2,
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () => _decrementScore("2", score2),
+                        child: Icon(Icons.remove),
+                      ),
+                      Text(
+                        '$score2',
+                        style: TextStyle(fontSize: 24),
+                      ),
+                      ElevatedButton(
+                        onPressed: () => _incrementScore("2", score2),
+                        child: Icon(Icons.add),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildTeamColumn({
-    required String teamName,
-    required String score,
-    required VoidCallback onIncrement,
-    required VoidCallback onDecrement,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Team:',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          Text(teamName),
-          SizedBox(height: 10),
-          Text(
-            'Score:',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          Text('$score'),
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton(
-                onPressed: onDecrement,
-                child: Icon(Icons.remove),
-              ),
-              ElevatedButton(
-                onPressed: onIncrement,
-                child: Icon(Icons.add),
-              ),
-            ],
-          ),
-        ],
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+              onPressed: () => _updateProgress('past'),
+              child: Text('Past'),
+            ),
+            ElevatedButton(
+              onPressed: () => _updateProgress('live'),
+              child: Text('Live'),
+            ),
+            ElevatedButton(
+              onPressed: () => _updateProgress('upcoming'),
+              child: Text('Upcoming'),
+            ),
+          ],
+        ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {},
+        label: Text('Current Progress: $progress'),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+    
   }
 }
-
