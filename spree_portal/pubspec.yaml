@@ -38,6 +38,12 @@ dependencies:
   firebase_core: ^2.25.5
   firebase_auth: ^4.17.6
   firebase_database: ^10.4.7
+  fluttertoast: ^8.2.4
+  google_fonts: ^5.1.0
+  neopop: ^1.0.2
+  http: ^1.2.0
+  googleapis_auth: ^1.5.1
+  googleapis: ^13.1.0
 
 dev_dependencies:
   flutter_test:
