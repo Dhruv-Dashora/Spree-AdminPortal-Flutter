@@ -4,7 +4,7 @@ import 'package:spree_portal/screens/sports_screen.dart';
 class Sports extends StatelessWidget {
   Sports({super.key});
   final List<String> sports = [
-    'Table-Tennis',
+    'Table-tennis',
     'Snooker',
     'Badminton',
     'Squash',
@@ -13,7 +13,7 @@ class Sports extends StatelessWidget {
     'Football',
     'Tennis',
     'Basketball',
-    'UFC'
+    'Athletics'
   ];
   
 
