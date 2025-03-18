@@ -103,7 +103,7 @@ class _AddGameScreenState extends State<AddGameScreen> {
 
   String _progressValue = 'upcoming'; // Default value
 
-  final DatabaseReference _database = FirebaseDatabase.instance.reference();
+  final DatabaseReference _database = FirebaseDatabase.instance.ref();
 
   @override
   Widget build(BuildContext context) {
@@ -161,8 +161,8 @@ class _AddGameScreenState extends State<AddGameScreen> {
                 };
 
                 // Get a reference to the sport's folder
-                DatabaseReference sportRef =
-                    _database.child('sports/${widget.sport}/${_gameTitleController.text}');
+                DatabaseReference sportRef = _database.child(
+                    'sports/${widget.sport}/${_gameTitleController.text}');
 
                 // Push the game data under the sport's folder
                 sportRef.set(gameData);
