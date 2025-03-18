@@ -24,15 +24,14 @@ class _LoginState extends State<Login> {
 
   Future<void> _signInWithEmailAndPassword() async {
     try {
-      UserCredential userCredential =
-          await _auth.signInWithEmailAndPassword(
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
       );
-      
+
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) =>  HomeScreen()),
+        MaterialPageRoute(builder: (_) => HomeScreen()),
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found' || e.code == 'wrong-password') {

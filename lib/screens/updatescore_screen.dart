@@ -14,7 +14,7 @@ class MatchInfoScreen extends StatefulWidget {
 class _MatchInfoScreenState extends State<MatchInfoScreen> {
   late DatabaseReference _sportRef;
   String team1 = "";
-  String team2 ="";
+  String team2 = "";
   String score1 = "";
   String score2 = "";
   String progress = "";
@@ -22,11 +22,13 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
   @override
   void initState() {
     super.initState();
-    _sportRef = FirebaseDatabase.instance.ref().child('sports/${widget.sport}/${widget.gameTitle}');
+    _sportRef = FirebaseDatabase.instance
+        .ref()
+        .child('sports/${widget.sport}/${widget.gameTitle}');
     _fetchGameData();
   }
 
-  void _incrementScore (String lr, String currentScore) async {
+  void _incrementScore(String lr, String currentScore) async {
     int t = int.parse(currentScore);
     t++;
     await _sportRef.update({
@@ -51,7 +53,8 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
   void _fetchGameData() {
     _sportRef.onValue.listen((DatabaseEvent event) {
       if (event.snapshot.value != null) {
-        Map<dynamic, dynamic> gameData = event.snapshot.value as Map<dynamic, dynamic>;
+        Map<dynamic, dynamic> gameData =
+            event.snapshot.value as Map<dynamic, dynamic>;
         setState(() {
           team1 = gameData['team1'] ?? '';
           team2 = gameData['team2'] ?? '';
@@ -173,6 +176,5 @@ class _MatchInfoScreenState extends State<MatchInfoScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
-    
   }
 }
