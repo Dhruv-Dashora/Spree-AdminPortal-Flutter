@@ -13,29 +13,32 @@ class Sports extends StatelessWidget {
     'Football',
     'Tennis',
     'Basketball',
-    'Athletics'
+    'Athletics',
+    'Chess',
+    'Carrom',
+    'Powerlifting',
   ];
-  
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: sports.length,
-        itemBuilder: (context, index) {
-          return Card(
-            child: ListTile(
-              title: Text(sports[index]),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SportDetailsScreen(sport: sports[index]),
-                  ),
-                );
-              },
-            ),
-          );
-        },
-      );
+      itemCount: sports.length,
+      itemBuilder: (context, index) {
+        return Card(
+          child: ListTile(
+            title: Text(sports[index]),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      SportDetailsScreen(sport: sports[index]),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 }
